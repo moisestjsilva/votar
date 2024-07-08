@@ -23,7 +23,8 @@ def votar(opcao):
     mensagem.empty()  # Limpar a mensagem após o tempo definido
 
 # Função para salvar votos em arquivo CSV
-def salvar_votos():
+ef salvar_votos():
+    file_path = os.path.join(os.getcwd(), 'votos.csv')  # Caminho absoluto para o arquivo votos.csv
     now = datetime.now()
     data = {
         'Opção': [],
@@ -37,7 +38,7 @@ def salvar_votos():
         data['Data'].append(now.strftime('%Y-%m-%d %H:%M:%S'))
 
     df = pd.DataFrame(data)
-    df.to_csv('votos.csv', index=False)
+    df.to_csv(file_path, index=False)
 
 # Função para filtrar os resultados por mês
 def filtrar_por_mes(df, mes):
