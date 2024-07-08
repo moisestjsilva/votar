@@ -23,7 +23,7 @@ def votar(opcao):
     mensagem.empty()  # Limpar a mensagem após o tempo definido
 
 # Função para salvar votos em arquivo CSV
-ef salvar_votos():
+def salvar_votos():
     file_path = os.path.join(os.getcwd(), 'votos.csv')  # Caminho absoluto para o arquivo votos.csv
     now = datetime.now()
     data = {
