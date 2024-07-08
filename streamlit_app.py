@@ -24,19 +24,28 @@ def votar(opcao):
 
 # Função para salvar votos em arquivo CSV
 def salvar_votos():
-    now = datetime.now()
+    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     data = {
         'Opção': [],
         'Votos': [],
         'Data': []
     }
 
-    for opcao, votos in st.session_state.votos.items():
-        data['Opção'].append(opcao)
-        data['Votos'].append(votos)
-        data['Data'].append(now.strftime('%Y-%m-%d %H:%M:%S'))
+    # Carregar dados existentes se o arquivo já existir
+    if os.path.exists('votos.csv'):
+        df = pd.read_csv('votos.csv')
+    else:
+        df = pd.DataFrame(columns=['Opção', 'Votos', 'Data'])
 
-    df = pd.DataFrame(data)
+    # Atualizar dados com os votos atuais
+    for opcao, votos in st.session_state.votos.items():
+        # Verificar se a opção já existe no DataFrame
+        if opcao in df['Opção'].values:
+            df.loc[df['Opção'] == opcao, 'Votos'] += votos
+        else:
+            df = df.append({'Opção': opcao, 'Votos': votos, 'Data': now}, ignore_index=True)
+
+    # Salvar DataFrame atualizado de volta ao arquivo CSV
     df.to_csv('votos.csv', index=False)
 
 # Função para filtrar os resultados por mês
