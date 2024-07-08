@@ -156,7 +156,7 @@ def tela_principal():
 
     # Botão invisível para controlar o fluxo da aplicação
     st.markdown('<div style="visibility: hidden;">', unsafe_allow_html=True)
-    if st.button('Visualizar Relatórios', key='ver_relatorios_hidden'):
+    if st.button('Relatórios', key='ver_relatorios_hidden'):
         st.session_state.page = 'resultados'
     st.markdown('</div>', unsafe_allow_html=True)
 
