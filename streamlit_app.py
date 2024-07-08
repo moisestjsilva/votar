@@ -140,7 +140,7 @@ def tela_principal():
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Espaço maior para posicionar o botão "Visualizar Relatórios" mais abaixo
+    # Espaço maior para posicionar o botão "Visualizar Relatórios" mais abaixo na tela
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)
     st.markdown('<br>', unsafe_allow_html=True)
@@ -156,6 +156,10 @@ def tela_principal():
 # Função para mostrar a tela de resultados
 def tela_resultados():
     st.title('Resultados')
+
+    # Botão para voltar para a tela principal
+    if st.button('Voltar para a tela principal'):
+        st.session_state.page = 'principal'
 
     # Carregar dados do arquivo votos.csv
     if os.path.exists('votos.csv'):
@@ -234,4 +238,3 @@ def main():
 # Executar a aplicação
 if __name__ == '__main__':
     main()
-
