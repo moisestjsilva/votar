@@ -16,10 +16,10 @@ def votar(opcao):
     st.session_state.votos[opcao] += 1
     salvar_votos()
 
-    # Mostrar mensagem de sucesso por 2 segundos
+    # Mostrar mensagem de sucesso por 1 segundos
     mensagem = st.empty()
     mensagem.success(f'Voto registrado com sucesso: {opcao}')
-    time.sleep(2)  # Manter a mensagem por 2 segundos
+    time.sleep(1)  # Manter a mensagem por 1 segundos
     mensagem.empty()  # Limpar a mensagem após o tempo definido
 
 # Função para salvar votos em arquivo CSV
