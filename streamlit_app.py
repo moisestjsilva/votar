@@ -24,28 +24,19 @@ def votar(opcao):
 
 # Função para salvar votos em arquivo CSV
 def salvar_votos():
-    now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    now = datetime.now()
     data = {
         'Opção': [],
         'Votos': [],
         'Data': []
     }
 
-    # Carregar dados existentes se o arquivo já existir
-    if os.path.exists('votos.csv'):
-        df = pd.read_csv('votos.csv')
-    else:
-        df = pd.DataFrame(columns=['Opção', 'Votos', 'Data'])
-
-    # Atualizar dados com os votos atuais
     for opcao, votos in st.session_state.votos.items():
-        # Verificar se a opção já existe no DataFrame
-        if opcao in df['Opção'].values:
-            df.loc[df['Opção'] == opcao, 'Votos'] += votos
-        else:
-            df = df.append({'Opção': opcao, 'Votos': votos, 'Data': now}, ignore_index=True)
+        data['Opção'].append(opcao)
+        data['Votos'].append(votos)
+        data['Data'].append(now.strftime('%Y-%m-%d %H:%M:%S'))
 
-    # Salvar DataFrame atualizado de volta ao arquivo CSV
+    df = pd.DataFrame(data)
     df.to_csv('votos.csv', index=False)
 
 # Função para filtrar os resultados por mês
@@ -134,24 +125,31 @@ def tela_principal():
 
     with col1:
         st.image('insatisfeito.png', width=100)
-        if st.button('Insatisfeito', key='insatisfeito'):
+        if st.button('Insatisfeito', key='insatisfeito_button'):
             votar('Insatisfeito')
 
     with col2:
         st.image('neutro.png', width=100)
-        if st.button('Neutro', key='neutro'):
+        if st.button('Neutro', key='neutro_button'):
             votar('Neutro')
 
     with col3:
         st.image('satisfeito.png', width=100)
-        if st.button('Satisfeito', key='satisfeito'):
+        if st.button('Satisfeito', key='satisfeito_button'):
             votar('Satisfeito')
 
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Botão para ir para a tela de resultados
-    if st.button('Visualizar Relatórios', key='ver_relatorios', help='Clique para ver os relatórios'):
+    # Espaço maior para posicionar o botão "Visualizar Relatórios" mais abaixo
+    st.markdown('<br>', unsafe_allow_html=True)
+    st.markdown('<br>', unsafe_allow_html=True)
+    st.markdown('<br>', unsafe_allow_html=True)
+
+    # Botão invisível para controlar o fluxo da aplicação
+    st.markdown('<div style="visibility: hidden;">', unsafe_allow_html=True)
+    if st.button('Visualizar Relatórios', key='ver_relatorios_hidden'):
         st.session_state.page = 'resultados'
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('</div>', unsafe_allow_html=True)
 
@@ -220,16 +218,20 @@ def tela_resultados():
     ax2.set_title('Percentual de Votos por Categoria')
     st.pyplot(fig2)
 
-    # Botão para voltar para a tela principal
-    if st.button('Voltar para a Tela Principal', key='voltar_principal'):
+# Definir layout da aplicação
+def main():
+    st.markdown('<style>body{background-color: #f5f5f5;}</style>', unsafe_allow_html=True)
+
+    # Selecionar a página com base no botão clicado
+    if 'page' not in st.session_state:
         st.session_state.page = 'principal'
 
-# Inicializar a variável de sessão para a página atual
-if 'page' not in st.session_state:
-    st.session_state.page = 'principal'
+    if st.session_state.page == 'principal':
+        tela_principal()
+    elif st.session_state.page == 'resultados':
+        tela_resultados()
 
-# Mostrar a página correspondente
-if st.session_state.page == 'principal':
-    tela_principal()
-else:
-    tela_resultados()
+# Executar a aplicação
+if __name__ == '__main__':
+    main()
+
